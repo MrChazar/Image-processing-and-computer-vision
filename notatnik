@@ -2,12 +2,14 @@ Zrobione:
 - wybrać pomysły
 - prosty model z kerasem bez zaznaczaniu kręgosłupa z 0 - brak skoliozy 1- skolioza działa tak sobie
 - wczytanie danych z roboflowa (niekompletnych z powodu dziwnego wypakowywania i ograniczeń windowsa)
+- - usunąć niepasujące dane
+- rozszerzyć dataset scoliosis
 
 Co zrobić ?
 - ogarnąć jak stosować anotację do zaznaczania kręgosłupa
 - zastosować model pytorcha wraz z poprawnymi anotacjami
-- rozszerzyć dataset scoliosis
-- usunąć niepasujące dane
+
+
 
 Datasety:
 - roboflow scoliosis x-ray // prosty model był robiony z nim
