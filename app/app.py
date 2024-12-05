@@ -8,7 +8,7 @@ import torch
 with open('../model/model.pkl', 'rb') as f:
     conv_model = pickle.load(f)
 
-yolo_model = torch.hub.load('ultralytics/yolov5', 'custom', path='../notebooks/yolov5/runs/train/exp2/weights/last.pt', force_reload=True)
+yolo_model = torch.hub.load('ultralytics/yolov5', 'custom', path='../notebooks/yolov5/runs/train/exp7/weights/last.pt', force_reload=True)
 
 
 def preprocess_image_conv_model(image):
@@ -22,8 +22,13 @@ def draw_bounding_boxes(image, results):
     for *box, conf, cls in results.xyxy[0]:
         label = f'{results.names[int(cls)]} {conf:.2f}'
         x1, y1, x2, y2 = map(int, box)
-        cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
-        cv2.putText(image, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+
+        if "normal" in results.names[int(cls)] :
+            cv2.putText(image, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 1)
+            cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
+        else:
+            cv2.putText(image, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 123, 0), 1)
+            cv2.rectangle(image, (x1, y1), (x2, y2), (255, 123, 0), 2)
     return image
 
 
@@ -37,6 +42,7 @@ if uploaded_file is not None:
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     image = cv2.imdecode(file_bytes, 1)
     image_with_boxes = image
+
     if "Konwolucyjny" in models_to_use:
         processed_image_conv = preprocess_image_conv_model(image)
         prediction_conv = conv_model.predict(processed_image_conv)
@@ -47,7 +53,11 @@ if uploaded_file is not None:
         processed_image_yolo = image
         prediction_yolo = yolo_model(processed_image_yolo)
         image_with_boxes = draw_bounding_boxes(image.copy(), prediction_yolo)
-        st.write(f"Predykcja (YOLOv5): {prediction_yolo}")
+        for result in prediction_yolo.xyxy[0]:
+            x1, y1, x2, y2, conf, cls = result
+            class_name = prediction_yolo.names[int(cls)]
+            st.write(
+                f"Klasa: {class_name}, Pewność: {conf:.2f}, Bounding Box: ({x1:.2f}, {y1:.2f}, {x2:.2f}, {y2:.2f})")
 
-
-    st.image(image_with_boxes, caption='Przesłane zdjęcie z bounding boxami', width=300)
+    if models_to_use != []:
+        st.image(image_with_boxes, caption='Przesłane zdjęcie', width=700)

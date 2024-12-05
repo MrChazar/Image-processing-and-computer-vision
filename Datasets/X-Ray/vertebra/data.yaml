@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 1
+names: ['Vertebra']
+
+roboflow:
+  workspace: scoliosis-dataset
+  project: scoliosis2-dvnfp-slhfq-x8hr5-qingn
+  version: 6
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/scoliosis-dataset/scoliosis2-dvnfp-slhfq-x8hr5-qingn/dataset/6
