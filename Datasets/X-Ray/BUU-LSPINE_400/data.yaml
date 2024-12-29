@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 2
+names: ['normal spine', 'scoliosis spine']
+
+roboflow:
+  workspace: scoliosis-dataset
+  project: scoliosis2-dvnfp-slhfq-x8hr5-qingn
+  version: 2
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/scoliosis-dataset/scoliosis2-dvnfp-slhfq-x8hr5-qingn/dataset/2
